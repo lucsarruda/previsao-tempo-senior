@@ -1,0 +1,7 @@
+{
+    "/weather": {
+        "target": "https://api.hgbrasil.com/weather",
+        "secure": false,
+        "changeOrigin": true
+    }
+}

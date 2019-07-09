@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+.titulo {
+    font-weight: bold;
+    color: #fff;
+    text-align: Center;
+    height: 80px;
+    line-height: 80px;
+    margin: 0 !important;
+}
+
+.topo {
+    background-color: rgb(14, 149, 109);
+    height: 140px;
+    line-height: 80px;
+}

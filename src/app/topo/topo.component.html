@@ -1,0 +1,37 @@
+<div class="container-fluid no-padding topo">
+    <!-- Início Topo -->
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="titulo">Portal do Clima <span class="oi oi-cloudy" aria-hidden="true"></span></h1>
+
+        </div>
+    </div>
+
+    <div class="row justify-content-md-center" [formGroup]="formulario" novalidate (ngSubmit)="buscaPrevisao()">
+
+
+        <div class="col-md-auto">
+            <div class="form-group">
+                <select id="estado" formControlName="estado" class="form-control" placeholder="Estado" (change)="onSelect($event)">
+                        <option value="">Selecione um Estado...</option>
+                        <option *ngFor="let estado of estados" value={{estado.id}};{{estado.sigla}}>
+                                {{estado.sigla}}
+                              </option>
+                    </select>
+
+            </div>
+        </div>
+        <div class="col-md-auto">
+            <div class="input-group">
+                <input id="cidade" formControlName="cidade" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" (focus)="focus$.next($event.target.value)" (click)="click$.next($event.target.value)" #instance="ngbTypeahead" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-secondary" (click)="buscaPrevisao()"><span class="oi oi-compass"></span> Buscar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- Fim Topo -->
+<app-previsao [recebeTopo]="paramLoadPrevisao"></app-previsao>

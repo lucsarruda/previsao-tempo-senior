@@ -1,0 +1,25 @@
+.previsaoatual {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.outrosdias {
+    font-weight: bold;
+}
+
+.temperatura-atual,
+.temperatura {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.desc-atual,
+.text-center,
+.desc-outrosdias {
+    text-align: center;
+}
+
+.iconstemp {
+    font-size: 20px;
+    top: 5px;
+}
