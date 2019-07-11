@@ -5,6 +5,7 @@ import { Observable, Subject,merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { EstadosService } from "../services/estados.service";
+import { ParamPrevisao } from '../models/paramPrevisao.model';
 
 @Component({
   selector: 'app-topo',
@@ -15,10 +16,11 @@ import { EstadosService } from "../services/estados.service";
 export class TopoComponent implements OnInit {
      
   public estados = [] 
-  public respostaCidade : Cidade
   public cidades = [] 
-  public paramLoadPrevisao = []
-
+  public respostaCidade : Cidade
+  public paramLoadPrevisao : ParamPrevisao
+  public ok = true
+  public menserro = ""
   model: any;
 
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
@@ -26,28 +28,23 @@ export class TopoComponent implements OnInit {
   click$ = new Subject<string>();
 
   public formulario: FormGroup = new FormGroup({
-    'estado': new FormControl(null),
-    'cidade': new FormControl(null),
+    'estado': new FormControl("" ,[Validators.required]),
+    'cidade': new FormControl("" ,[Validators.required]),
   })
 
   constructor(private estadosService : EstadosService) { }  
 
   ngOnInit() {
 
-    this.paramLoadPrevisao = [42,"SC","Blumenau"]
+    this.paramLoadPrevisao = new ParamPrevisao( 50 , "SC" , "Blunemau")
 
-     this.estadosService.getEstados()
+    this.estadosService.getEstados()
      .subscribe(res => {
        this.estados = res;
      }, err => {
        console.log(err);
      });
 
-  }
-
-  public changeEstado(event){
-    console.log(event.target)
-    console.log(event.target.value)
   }
 
   public onSelect(event) {
@@ -67,13 +64,25 @@ export class TopoComponent implements OnInit {
     }, err => {
       console.log(err);
     });
-
   }
 
   public buscaPrevisao(): void {
-    let estad = this.formulario.value.estado.split(";")
-    this.paramLoadPrevisao = [estad[0],estad[1],this.formulario.value.cidade]
-    this.formulario.reset();
+    let estado = this.formulario.value.estado
+    let cidade = this.formulario.value.cidade
+    if (estado == "" || estado == undefined || cidade == "" || cidade == undefined ) {
+      this.menserro = "Favor informar um Estado e uma Cidade..."
+      this.ok = false
+      return
+    }
+    if(!this.cidades.includes(cidade)){
+      this.menserro = "Favor selecionar uma Cidade valida..."
+      this.ok = false
+      return
+    }
+    this.ok = true
+    let estad = estado.split(";")
+    this.paramLoadPrevisao = new ParamPrevisao( estad[0] , estad[1] , cidade )
+    this.formulario.reset({ estado: '', cidade: '' });
   }
 
 
@@ -84,7 +93,7 @@ export class TopoComponent implements OnInit {
 
     return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
       map(term => (term === '' ? this.cidades
-        : this.cidades.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+        : this.cidades.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 5))
     );
   }
 }

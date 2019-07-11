@@ -7,6 +7,11 @@ import { catchError, tap, map, retry } from 'rxjs/operators';
 const apiUrl = 'https://api.hgbrasil.com/weather';
 const apiKey = 'cd3d711f'
 
+// Por problemas na politica de CORS da API implementada, foi então alterado 
+// o consumo da URL para uma API Fake.
+// Somente para fim de consumo e alimentação dos componentes Angular 
+const apiUrlFake = 'https://www.mocky.io/v2/5d269ee43200004d0071b5d3';
+
 @Injectable()
 export class PrevisaoService {
 
@@ -14,10 +19,10 @@ export class PrevisaoService {
 
   getPrevisao(estado: string, cidade:string): Observable<any> {
     const  params = new  HttpParams().set('key', apiKey ).set('city_name', `${cidade},${estado}`);
-    const  headers = new HttpHeaders().set('Content-Type' , 'application/json' ).set( 'Access-Control-Allow-Origin', '*').set('Access-Control-Allow-Methods','GET')
-    const url = `${apiUrl}`//=${cidade},${estado}`;
-    return this.http.get<any>(url, {params,headers} ).pipe(
-      tap( previsao => console.log("previsao!!! ",previsao))
+    const  headers = new HttpHeaders().set('Content-Type' , 'application/json' ).set( 'Access-Control-Allow-Origin', '*')//.set('Access-Control-Allow-Methods','GET')
+    const url = `${apiUrlFake}`//`${apiUrl}`
+    return this.http.get<any>(url).pipe(
+      tap( previsao => previsao)
     );
   }
 

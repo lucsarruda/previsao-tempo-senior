@@ -11,17 +11,19 @@ export class PrevisaoComponent implements OnInit,OnChanges {
 
   @Input() recebeTopo;
 
+  public previsao : any
+
   constructor( private previsaoService : PrevisaoService ) { }
 
   ngOnInit() {
   }
 
   ngOnChanges(){
-    let estado = this.recebeTopo[1]
-    let cidade = this.recebeTopo[2]
+    let estado = this.recebeTopo.estado
+    let cidade = this.recebeTopo.cidade
     this.previsaoService.getPrevisao(estado,cidade)
     .subscribe(res => {
-       console.log(res)
+      this.previsao = res.results 
     }, err => {
       console.log(err);
     });
